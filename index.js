@@ -14,7 +14,7 @@ console.log(
 );
 
 const run = async () => {
-  const config = await inquirer.askUrlToConvert();
+  const config = await inquirer.askConvertionConfig();
   const loader = new Spinner(`Converting "${config.url}" please wait...`);
   loader.start();
   await convert(config);
