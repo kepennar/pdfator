@@ -15,7 +15,7 @@ const run = async () => {
   const config = await askConvertionConfig();
   const loader = new Spinner(`Converting "${config.url}" please wait...`);
   loader.start();
-  await convert(config);
+  await convert({ ...config, flushToDisk: true });
   loader.stop();
 };
 
