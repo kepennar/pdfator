@@ -62,14 +62,14 @@ export async function pdfatorHandler(
 
       objectOutput = await S3Bucket.putObject({
         Bucket: BUCKET_NAME,
-        Key: event.requestContext.requestId,
+        Key: S3Key,
         ContentType: pdfAtorFormat,
         Body: result
       }).promise();
     }
 
     const response = {
-      statusCode: 200,
+      statusCode: 301,
       headers: { location: generateUrl(S3Key) },
       body: ''
     };
@@ -104,5 +104,5 @@ function generateS3key(
 }
 
 function generateUrl(key: string) {
-  return `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${key}`;
+  return `https://s3.${REGION}.amazonaws.com/${BUCKET_NAME}/${key}`;
 }

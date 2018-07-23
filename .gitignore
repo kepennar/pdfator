@@ -64,3 +64,5 @@ typings/
 
 
 # End of https://www.gitignore.io/api/node
+
+packages/pdfator-serverless/package.zip
