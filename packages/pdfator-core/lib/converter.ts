@@ -1,21 +1,7 @@
-import { extname } from 'path';
-import * as puppeteer from 'puppeteer';
-
-import { getBrowser } from './setup';
-import { DEBUG } from './config';
 import { debug } from './Logger';
-
-export interface IConverterConfig {
-  url: string;
-  outputFile: string;
-  format: puppeteer.PDFFormat;
-  flushToDisk: boolean;
-}
-
-export enum PDFatorFormat {
-  PDF = 'application/pdf',
-  PNG = 'image/png'
-}
+import { IConverterConfig, PDFatorFormat } from './pdfator.model';
+import { getBrowser } from './setup';
+import { getFormatFromFilename } from './config';
 
 export async function convert({
   url,
@@ -34,12 +20,11 @@ export async function convert({
   const config = {
     path: flushToDisk ? outputFile : undefined
   };
-  const desiredOutput = extname(outputFile);
+  const convertionFormat = getFormatFromFilename(outputFile);
 
-  debug('before convert', config);
-
+  debug('Start convertion with config', config);
   let result: Buffer;
-  if (desiredOutput === '.pdf') {
+  if (convertionFormat === PDFatorFormat.PDF) {
     result = await page.pdf({
       ...config,
       format,
@@ -47,20 +32,14 @@ export async function convert({
       scale: 0.78,
       margin: { top: '0', right: '0', bottom: '0', left: '0' }
     });
-  } else if (desiredOutput === '.png') {
+  } else if (convertionFormat === PDFatorFormat.PNG) {
     result = await page.screenshot({ ...config, fullPage: true });
   } else {
-    throw new Error(`Unsupported format ${desiredOutput}`);
+    throw new Error(`Unsupported format ${convertionFormat}`);
   }
   debug('result', result);
 
   await browser.close();
-  debug({ DEBUG });
   debug({ result });
   return result;
-}
-
-export function getFormatFromFilename(filename: string): PDFatorFormat {
-  const ext = extname(filename);
-  return ext === '.png' ? PDFatorFormat.PNG : PDFatorFormat.PDF;
 }

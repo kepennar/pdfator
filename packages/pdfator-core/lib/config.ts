@@ -1,16 +1,14 @@
-import { join, sep } from 'path';
+import { extname, join, sep } from 'path';
+import { PDFatorFormat } from './pdfator.model';
 
-const localChromePath = join('headless-chromium.zip');
+export const localChromePath = join('headless-chromium.zip');
+export const setupChromePath = join(sep, 'tmp');
+export const executablePath = join(setupChromePath, 'headless-chromium');
 
-const setupChromePath = join(sep, 'tmp');
-const executablePath = join(setupChromePath, 'headless-chromium');
+export const DEBUG = !!process.env.DEBUG;
+export const WITH_LOCAL_CHROME = !!process.env.LOCAL_CHROME;
 
-const DEBUG = !!process.env.DEBUG;
-const WITH_LOCAL_CHROME = !!process.env.LOCAL_CHROME;
-export {
-  localChromePath,
-  setupChromePath,
-  executablePath,
-  DEBUG,
-  WITH_LOCAL_CHROME
-};
+export function getFormatFromFilename(filename: string): PDFatorFormat {
+  const ext = extname(filename);
+  return ext === '.png' ? PDFatorFormat.PNG : PDFatorFormat.PDF;
+}

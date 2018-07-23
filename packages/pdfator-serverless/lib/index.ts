@@ -2,11 +2,11 @@ import {
   convert,
   debug,
   IConverterConfig,
-  getFormatFromFilename
+  getFormatFromFilename,
+  PDFatorSizes
 } from '@pdfator/core';
 import { APIGatewayEvent, Callback, Context } from 'aws-lambda';
 import { S3 } from 'aws-sdk';
-import * as puppeteer from 'puppeteer';
 const sha1 = require('sha1');
 
 type PutS3Output = S3.Types.PutObjectOutput;
@@ -22,7 +22,7 @@ if (!BUCKET_NAME) {
   throw new Error('"process.env.BUCKET" is mandatory');
 }
 
-const defaultConfig: IConverterConfig = {
+const DEFAULT_CONFIG: IConverterConfig = {
   url: 'https://google.fr',
   outputFile: 'google.pdf',
   format: 'Letter',
@@ -39,25 +39,14 @@ export async function pdfatorHandler(
   // For keeping the browser launch
   context.callbackWaitsForEmptyEventLoop = false;
   try {
-    const queryStringParameters = event.queryStringParameters || {};
-    const url = queryStringParameters.url || defaultConfig.url;
-    const outputFile =
-      queryStringParameters.outputFile || defaultConfig.outputFile;
-    const format = (queryStringParameters.format ||
-      defaultConfig.format) as puppeteer.PDFFormat;
+    const converterConfig = configFromEvent(event);
 
-    const S3Key = generateS3key(url, outputFile, format);
+    const S3Key = generateS3key(converterConfig);
     let objectOutput: PutS3Output | null = await retrieveFromS3(S3Key);
 
     if (!objectOutput) {
-      const converterConfig = {
-        url,
-        format,
-        outputFile,
-        flushToDisk: false
-      };
       debug('Call converter with config', converterConfig);
-      const pdfAtorFormat = getFormatFromFilename(outputFile);
+      const pdfAtorFormat = getFormatFromFilename(converterConfig.outputFile);
       const result = await convertWebpage(converterConfig);
 
       objectOutput = await S3Bucket.putObject({
@@ -79,10 +68,22 @@ export async function pdfatorHandler(
   }
 }
 
-export function convertWebpage(config: IConverterConfig = defaultConfig) {
+export function convertWebpage(config: IConverterConfig = DEFAULT_CONFIG) {
   return convert(config);
 }
 
+function configFromEvent(event: APIGatewayEvent): IConverterConfig {
+  const query = event.queryStringParameters;
+  if (!query) {
+    return DEFAULT_CONFIG;
+  }
+  return {
+    url: query.url || DEFAULT_CONFIG.url,
+    outputFile: query.outputFile || DEFAULT_CONFIG.outputFile,
+    format: (query.format || DEFAULT_CONFIG.format) as PDFatorSizes,
+    flushToDisk: false
+  };
+}
 async function retrieveFromS3(key: string): Promise<GetS3Output | null> {
   try {
     return await S3Bucket.getObject({
@@ -95,11 +96,7 @@ async function retrieveFromS3(key: string): Promise<GetS3Output | null> {
   }
 }
 
-function generateS3key(
-  url: string,
-  format: string,
-  outputfile: string
-): string {
+function generateS3key({ url, format, outputfile }: IConverterConfig): string {
   return sha1(`${url}-${format}-${outputfile}`);
 }
 
