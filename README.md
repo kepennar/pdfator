@@ -14,3 +14,7 @@ Two formats supported:
 
 * pdf
 * png
+
+## Thanks
+
+Local Pupetteer setup is heavily inspired from https://github.com/sambaiz/puppeteer-lambda-starter-kit/
