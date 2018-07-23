@@ -55,7 +55,7 @@ export const getBrowser = (() => {
   };
 })();
 
-const isBrowserAvailable = async (browser: puppeteer.Browser) => {
+async function isBrowserAvailable(browser: puppeteer.Browser) {
   try {
     await browser.version();
   } catch (e) {
@@ -63,7 +63,7 @@ const isBrowserAvailable = async (browser: puppeteer.Browser) => {
     return false;
   }
   return true;
-};
+}
 
 async function setupLocalChrome() {
   const exists = await existsPromise(executablePath);
@@ -90,7 +90,6 @@ async function setupLocalChrome() {
       throw new Error(`File ${outPath} is not a valid output directory`);
     }
     await accessPromise(outPath, constants.W_OK);
-    console.log('Can write');
     await createReadStream(zipPath)
       .pipe(Extract({ path: outPath }))
       .promise();
