@@ -17,4 +17,4 @@ Two formats supported:
 
 ## Thanks
 
-Local Pupetteer setup is heavily inspired from https://github.com/sambaiz/puppeteer-lambda-starter-kit/
+Local Puppeteer setup is heavily inspired from https://github.com/sambaiz/puppeteer-lambda-starter-kit/
