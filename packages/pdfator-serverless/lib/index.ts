@@ -96,8 +96,8 @@ async function retrieveFromS3(key: string): Promise<GetS3Output | null> {
   }
 }
 
-function generateS3key({ url, format, outputfile }: IConverterConfig): string {
-  return sha1(`${url}-${format}-${outputfile}`);
+function generateS3key({ url, format, outputFile }: IConverterConfig): string {
+  return sha1(`${url}-${format}-${outputFile}`);
 }
 
 function generateUrl(key: string) {
