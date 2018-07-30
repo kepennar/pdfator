@@ -1,0 +1,68 @@
+service: pdfator 
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 1536
+  timeout: 180
+  region: ${self:custom.region}
+  stage: ${self:custom.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+package:
+  artifact: ./package.zip
+
+functions:
+  pdfator:
+    handler: index.pdfatorHandler
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
+    environment:
+      LOCAL_CHROME: "true"
+      DEBUG: "true"
+      BUCKET: ${self:custom.bucket}
+
+resources:
+  Resources:
+    ServerlesslyRedirectS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucket}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+    ServerlesslyRedirectS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: ${self:custom.bucket}
+        PolicyDocument:
+          Statement:
+          - Action:
+            - s3:GetObject
+            Effect: Allow
+            Resource:
+            - arn:aws:s3:::${self:custom.bucket}/*
+            Principal: "*"
+
+plugins:
+  - serverless-hooks-plugin
+
+custom:
+  hooks:
+    package:initialize:
+      - npm run package
+  bucket: pdfator-screens
+  region: eu-west-3
+  stage: test
+
