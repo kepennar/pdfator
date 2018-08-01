@@ -11,7 +11,7 @@
       />
     </div>
     <div class="actions">
-        <label>More <img class="shape" src="../assets/shape-down.svg"/></label>  
+        <label>More <img class="shape" src="../assets/arrow-down.svg"/></label>  
         <button
           class="convert"
         >

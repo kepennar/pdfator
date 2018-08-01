@@ -5,10 +5,10 @@
             <h5>Convert every url to a file</h5>
         </div>
         <div class="logo left">
-            <img  class="illustration" src='../assets/pdfator-logo-left.svg'/>
+            <img  class="illustration" src='../assets/pdfator-logo.svg'/>
         </div>
         <div class="logo right">
-            <img class="illustration" src='../assets/pdfator-logo-right.svg' /> 
+            <img class="illustration" src='../assets/pdfator-logo.svg' /> 
         </div>
     </div>
 </template>
@@ -29,6 +29,9 @@ export default {};
 
 .logo {
   flex: 1 auto;
+}
+.right {
+  transform: rotateY(180deg);
 }
 
 .illustration {
