@@ -29,7 +29,7 @@ export default {
 }
 
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
   color: #fafafa;
 }

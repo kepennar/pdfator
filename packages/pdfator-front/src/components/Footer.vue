@@ -1,7 +1,7 @@
 <template>
     <div class="section footer">
        This page have been created with 
-        <img class="heart" src='../assets/heart.svg' /> 
+        <img class="footer__heart" src='../assets/heart.svg' /> 
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {};
   background-color: #652d80;
   height: 10vh;
 }
-.heart {
+.footer__heart {
   width: 100%;
   max-width: 20px;
   margin: 0 0.5em;
