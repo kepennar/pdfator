@@ -1,6 +1,6 @@
 # PdfAtor
 
-![Logo](doc/pdfator-logo.svg?raw=true 'Screen')
+![Logo](doc/pdfator-logo.svg?sanitize=true 'Screen')
 
 ## A simple website to file cli
 
