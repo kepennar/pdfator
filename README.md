@@ -1,8 +1,10 @@
 # PdfAtor
 
+![Logo](doc/pdfator-logo.svg?raw=true 'Screen')
+
 ## A simple website to file cli
 
-![Alt text](doc/screen.gif?raw=true 'Screen')
+![Terminal screen](doc/screen.gif?raw=true 'Screen')
 
 Use it with `npx`
 
