@@ -6,7 +6,6 @@
         type="url" 
         id="url"
         placeholder="Type the url to convert here"
-        pattern="https://.*" 
       />
 </div>
 </template>

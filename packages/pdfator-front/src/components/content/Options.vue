@@ -2,7 +2,7 @@
     <div>
         <div class="options">
           <input  
-            @input="$emit('input-output-file', $event.target.value)"
+            @input="$emit('input-filename', $event.target.value)"
             class="input" 
             type="text" 
             id="filename" 
