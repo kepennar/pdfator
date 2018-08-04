@@ -3,13 +3,42 @@ import * as puppeteer from 'puppeteer';
 export interface IConverterConfig {
   url: string;
   outputFile: string;
-  format: PDFatorSizes;
+  size: PDFatorSizes;
   flushToDisk: boolean;
+  extension: PDFatorFormatKeys;
 }
 
 export type PDFatorSizes = puppeteer.PDFFormat;
 
-export enum PDFatorFormat {
-  PDF = 'application/pdf',
-  PNG = 'image/png'
+export type PDFatorFormatKeys = 'PDF' | 'PNG';
+
+export type IPdfatorFormats = { [K in PDFatorFormatKeys]: IPdfatorFormat };
+
+export interface IPdfatorFormat {
+  extension: string;
+  mime: string;
+  type: PDFatorFormatKeys;
+}
+export const PDFATOR_FORMATS: IPdfatorFormats = {
+  PDF: {
+    extension: '.pdf',
+    mime: 'application/pdf',
+    type: 'PDF'
+  },
+  PNG: {
+    extension: '.png',
+    mime: 'image/png',
+    type: 'PNG'
+  }
+};
+
+export function toPDFatorFormat(value: string) {
+  switch (value) {
+    case 'PNG':
+      return PDFATOR_FORMATS.PNG;
+    case 'PDF':
+      return PDFATOR_FORMATS.PDF;
+    default:
+      return undefined;
+  }
 }
