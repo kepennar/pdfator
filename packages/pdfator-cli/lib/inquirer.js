@@ -1,5 +1,3 @@
-const { extname } = require('path');
-const { IConverterConfig } = require('@pdfator/core');
 const { prompt } = require('inquirer');
 
 function askConvertionConfig() {
@@ -20,27 +18,41 @@ function askConvertionConfig() {
     {
       name: 'outputFile',
       type: 'input',
-      message: 'Enter the output filename. Valid extension .pdf or .png',
-      default: 'out.pdf',
+      message: 'Enter the output filename',
+      default: 'out',
       validate: value => {
-        if (value.length && ['.pdf', '.png'].includes(extname(value))) {
+        if (value.length) {
           return true;
         } else {
-          return 'Please enter  the output filename. Valid extension .pdf or .png';
+          return 'Please enter the output filename';
         }
       }
     },
     {
-      name: 'format',
+      name: 'extension',
       type: 'list',
-      message: 'Enter the wanted output format.',
+      message: 'Choose the desired file format',
+      choices: ['PDF', 'PNG'],
+      default: 'PDF',
+      validate: value => {
+        if (value.length) {
+          return true;
+        } else {
+          return 'Please the desired file format.';
+        }
+      }
+    },
+    {
+      name: 'size',
+      type: 'list',
+      message: 'Enter the wanted output size.',
       choices: ['A4', 'A3', 'letter'],
       default: 'A4',
       validate: value => {
         if (value.length) {
           return true;
         } else {
-          return 'Please the wanted output format.';
+          return 'Please the wanted output size.';
         }
       }
     }

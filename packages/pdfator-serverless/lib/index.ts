@@ -2,8 +2,9 @@ import {
   convert,
   debug,
   IConverterConfig,
-  getFormatFromFilename,
-  PDFatorSizes
+  PDFatorFormatKeys,
+  PDFatorSizes,
+  PDFATOR_FORMATS
 } from '@pdfator/core';
 import { APIGatewayEvent, Callback, Context } from 'aws-lambda';
 import { S3 } from 'aws-sdk';
@@ -25,7 +26,8 @@ if (!BUCKET_NAME) {
 const DEFAULT_CONFIG: IConverterConfig = {
   url: 'https://google.fr',
   outputFile: 'google.pdf',
-  format: 'Letter',
+  size: 'Letter',
+  extension: 'PDF',
   flushToDisk: false
 };
 
@@ -46,13 +48,12 @@ export async function pdfatorHandler(
 
     if (!objectOutput) {
       debug('Call converter with config', converterConfig);
-      const pdfAtorFormat = getFormatFromFilename(converterConfig.outputFile);
       const result = await convertWebpage(converterConfig);
 
       objectOutput = await S3Bucket.putObject({
         Bucket: BUCKET_NAME,
         Key: S3Key,
-        ContentType: pdfAtorFormat,
+        ContentType: PDFATOR_FORMATS[converterConfig.extension].mime,
         Body: result
       }).promise();
     }
@@ -77,10 +78,16 @@ function configFromEvent(event: APIGatewayEvent): IConverterConfig {
   if (!query) {
     return DEFAULT_CONFIG;
   }
+  const extension = query.extension;
+  if (extension && !['PDF', 'PNG'].includes(extension)) {
+    throw new Error('extension have to be one of "PDF", "PNG"');
+  }
+
   return {
     url: query.url || DEFAULT_CONFIG.url,
-    outputFile: query.outputFile || DEFAULT_CONFIG.outputFile,
-    format: (query.format || DEFAULT_CONFIG.format) as PDFatorSizes,
+    outputFile: DEFAULT_CONFIG.outputFile,
+    size: (query.size || DEFAULT_CONFIG.size) as PDFatorSizes,
+    extension: (extension as PDFatorFormatKeys) || DEFAULT_CONFIG.extension,
     flushToDisk: false
   };
 }
@@ -96,8 +103,8 @@ async function retrieveFromS3(key: string): Promise<GetS3Output | null> {
   }
 }
 
-function generateS3key({ url, format, outputFile }: IConverterConfig): string {
-  return sha1(`${url}-${format}-${outputFile}`);
+function generateS3key({ url, extension, size }: IConverterConfig): string {
+  return sha1(`${url}-${extension}-${size}`);
 }
 
 function generateUrl(key: string) {
