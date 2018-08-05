@@ -1,5 +1,7 @@
 # PdfAtor
 
+[![CircleCI](https://circleci.com/gh/kepennar/pdfator.svg?style=svg)](https://circleci.com/gh/kepennar/pdfator)
+
 ![Logo](doc/pdfator-logo.svg?sanitize=true 'Screen')
 
 ## A simple website to file cli
