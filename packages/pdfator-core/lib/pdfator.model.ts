@@ -31,14 +31,3 @@ export const PDFATOR_FORMATS: IPdfatorFormats = {
     type: 'PNG'
   }
 };
-
-export function toPDFatorFormat(value: string) {
-  switch (value) {
-    case 'PNG':
-      return PDFATOR_FORMATS.PNG;
-    case 'PDF':
-      return PDFATOR_FORMATS.PDF;
-    default:
-      return undefined;
-  }
-}
