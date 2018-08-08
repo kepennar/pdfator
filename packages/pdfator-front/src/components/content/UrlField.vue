@@ -6,6 +6,7 @@
         type="url" 
         id="url"
         placeholder="Type the url to convert here"
+        aria-label="url to convert"
       />
 </div>
 </template>
@@ -21,6 +22,6 @@ export default {};
   padding: 20px;
   width: 100%;
   height: 20px;
-  background-color: #e0e0e0;
+  background-color: rgba(255, 255, 255, 0.88);
 }
 </style>

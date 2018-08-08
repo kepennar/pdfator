@@ -6,7 +6,7 @@
           class="content__url-field"/>
         <options 
           v-show="showOptions"
-          @input-filename-="outputFile = $event"
+          @input-filename="outputFile = $event"
           class="content__options"
         />
         <actions 
@@ -24,12 +24,15 @@ import Actions from "./content/Actions.vue";
 import FileSaver from "file-saver";
 import axios from "axios";
 
+const CONFIG_URL =
+  "https://pdfator-c9101.firebaseio.com/config/prod/lambdaUrl.json";
+
 export default {
   data() {
     return {
       showOptions: false,
-      url: String,
-      outputFile: String
+      url: "",
+      outputFile: ""
     };
   },
   methods: {
@@ -40,8 +43,12 @@ export default {
         format: ""
       };
       const filename = this.outputFile || "test";
+
       axios
-        .get("/pdfator", { params, responseType: "blob" })
+        .get(CONFIG_URL)
+        .then(response => {
+          return axios.get(response.data, { params, responseType: "blob" });
+        })
         .then(response => {
           FileSaver.saveAs(response.data, `${filename}.pdf`);
         })
@@ -73,7 +80,7 @@ export default {
 }
 
 ::placeholder {
-  color: #7e009e;
+  color: rgba(126, 0, 158, 0.75);
 }
 
 @media only screen and (min-width: 601px) {

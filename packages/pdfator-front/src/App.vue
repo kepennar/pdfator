@@ -20,18 +20,13 @@ export default {
   }
 };
 </script>
-
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import "~normalize.css";
 
 #app {
   font-family: "Roboto", sans-serif;
   text-align: center;
-  color: #fafafa;
+  color: rgba(250, 250, 250, 0.79);
 }
 .section {
   display: flex;

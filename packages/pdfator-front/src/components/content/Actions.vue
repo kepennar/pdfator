@@ -2,12 +2,18 @@
     <div>
          <label @click="toggleOptions">
           {{ showOptions? "Less": "More" }} 
-          <img class="arrow"
+          <img 
+            class="arrow"
             :class="{'arrow--up': showOptions}"
             src="../../assets/arrow-down.svg"
+            alt="arrow"
           />
         </label>  
-        <button class="btn-convert" @click="onSubmit" >
+        <button 
+          class="btn-convert" 
+          @click="onSubmit" 
+          aria-label="convert"
+        >
           Convert
         </button>
     </div>
@@ -26,7 +32,6 @@ export default {
       this.$emit("toggle-options", this.showOptions);
     },
     onSubmit() {
-      console.log("submit convert-request ");
       this.$emit("convert-request");
     }
   }
@@ -49,7 +54,7 @@ export default {
   border-radius: 5px;
   border: none;
   background: #609;
-  color: #ffffff;
+  color: rgba(250, 250, 250, 0.79);
   padding: 10px;
   width: 100px;
   text-align: center;

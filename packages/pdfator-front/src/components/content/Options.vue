@@ -27,6 +27,9 @@ export default {};
 </script>
 
 <style scoped>
+.content__options {
+  background: rgba(255, 255, 255, 0.03);
+}
 .options {
   position: relative;
   padding-top: 1.5em;
@@ -34,7 +37,7 @@ export default {};
 .label {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 20px;
   opacity: 1;
   transform: translateY(0);
   transition: all 0.2s ease-out;
@@ -43,9 +46,9 @@ export default {};
   border-radius: 5px;
   border: 2px solid #609;
   padding: 20px;
+  margin: auto auto 20px 20px;
   width: 100%;
-  height: 20px;
-  background-color: #e0e0e0;
+  background-color: rgba(255, 255, 255, 0.88);
 }
 .input:placeholder-shown + label {
   opacity: 0;

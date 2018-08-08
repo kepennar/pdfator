@@ -5,10 +5,10 @@
             <h2>Convert every url to a file</h2>
         </div>
         <div class="header__logo header__logo--left">
-            <img  class="illustration" src='../assets/pdfator-logo.svg'/>
+            <img  class="illustration" src='../assets/pdfator-logo.svg' alt="logo"/>
         </div>
         <div class="header__logo header__logo--right">
-            <img class="illustration" src='../assets/pdfator-logo.svg' /> 
+            <img class="illustration" src='../assets/pdfator-logo.svg' alt="logo"/> 
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div class="section footer">
        This page have been created with 
-        <img class="footer__heart" src='../assets/heart.svg' /> 
+        <img class="footer__heart" src='../assets/heart.svg' alt="love"/> 
     </div>
 </template>
 
