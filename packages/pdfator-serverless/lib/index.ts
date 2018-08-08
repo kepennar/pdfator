@@ -60,7 +60,10 @@ export async function pdfatorHandler(
 
     const response = {
       statusCode: 301,
-      headers: { location: generateUrl(S3Key) },
+      headers: {
+        location: generateUrl(S3Key),
+        'Access-Control-Allow-Origin': '*'
+      },
       body: ''
     };
     callback(null, response);
