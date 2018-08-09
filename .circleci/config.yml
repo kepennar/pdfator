@@ -17,9 +17,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}-{{ checksum "packages/pdfator-front/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run: npm install
 
@@ -28,11 +28,14 @@ jobs:
             - packages/pdfator-core/node_modules
             - packages/pdfator-cli/node_modules
             - packages/pdfator-serverless/node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}
-      
-      # Bootstrap Lerna  
+            - packages/pdfator-front/node_modules
+          key:
+            v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}-{{ checksum "packages/pdfator-front/package.json" }}
+
+      # Bootstrap Lerna
       - run: npm run boostrap
-      
+
       # run builds!
       - run: npm run build:core
       - run: npm run build:serverless
+      - run: npm run build:front

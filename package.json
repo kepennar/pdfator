@@ -3,6 +3,7 @@
     "boostrap": "lerna bootstrap --hoist",
     "build:core": "lerna run build --scope='@pdfator/core'",
     "build:serverless": "lerna run build --scope='@pdfator/serverless'",
+    "build:front": "lerna run build --scope='@pdfator/front'",
     "package:serverless": "lerna run package --scope='@pdfator/serverless'",
     "deploy:serverless": "lerna run deploy --scope='@pdfator/serverless'",
     "build:all": "npm run build:core && npm run build:serverless"
