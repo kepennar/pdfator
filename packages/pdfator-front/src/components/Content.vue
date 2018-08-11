@@ -52,7 +52,7 @@ export default {
         outputFile: this.outputFile,
         format: ""
       };
-      const filename = this.outputFile || "test";
+      const filename = this.outputFile || "file";
 
       axios
         .get(this.lambdaUrl, { params, responseType: "blob" })
@@ -61,7 +61,7 @@ export default {
           this.convertingStatus = CONVERTING_STATUS.DONE;
           setTimeout(() => {
             this.convertingStatus = CONVERTING_STATUS.NONE;
-          }, 2000);
+          }, 500);
         })
         .catch(error => console.log(error));
     }

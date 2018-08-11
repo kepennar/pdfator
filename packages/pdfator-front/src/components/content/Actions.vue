@@ -82,6 +82,7 @@ export default {
   width: 100px;
   text-align: center;
   cursor: pointer;
+  transition: transform 0.5s ease-in-out, background 0.5s ease-in-out;
 }
 .btn-convert--converting {
   cursor: not-allowed;
@@ -93,7 +94,7 @@ export default {
 }
 .btn-convert--done {
   background-color: #009688;
-  transform: scale(1.3);
+  transform: scale(1.035);
 }
 
 @keyframes placeHolderShimmer {
