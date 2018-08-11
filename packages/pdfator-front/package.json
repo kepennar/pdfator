@@ -1,5 +1,5 @@
 {
-  "name": "pdfator",
+  "name": "@pdfator/front",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,9 +14,9 @@
     "vue": "^2.5.16"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.8",
-    "@vue/cli-plugin-eslint": "^3.0.0-rc.8",
-    "@vue/cli-service": "^3.0.0-rc.8",
+    "@vue/cli-plugin-babel": "^3.0.0-rc.12",
+    "@vue/cli-plugin-eslint": "^3.0.0-rc.12",
+    "@vue/cli-service": "^3.0.0-rc.12",
     "vue-template-compiler": "^2.5.16"
   },
   "eslintConfig": {

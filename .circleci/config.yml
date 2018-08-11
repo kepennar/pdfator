@@ -1,0 +1,41 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:10.8
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}-{{ checksum "packages/pdfator-front/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - packages/pdfator-core/node_modules
+            - packages/pdfator-cli/node_modules
+            - packages/pdfator-serverless/node_modules
+            - packages/pdfator-front/node_modules
+          key:
+            v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}-{{ checksum "packages/pdfator-front/package.json" }}
+
+      # Bootstrap Lerna
+      - run: npm run boostrap
+
+      # run builds!
+      - run: npm run build:core
+      - run: npm run build:serverless
+      - run: npm run build:front

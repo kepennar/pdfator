@@ -3,7 +3,9 @@
   "packages": [
     "packages/pdfator-core",
     "packages/pdfator-cli",
-    "packages/pdfator-serverless"
+    "packages/pdfator-serverless",
+    "packages/pdfator-front"
   ],
+  "nohoist": ["normalize.css*"],
   "version": "0.0.0"
 }

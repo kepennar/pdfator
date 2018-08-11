@@ -1,8 +1,12 @@
 # PdfAtor
 
+[![CircleCI](https://circleci.com/gh/kepennar/pdfator.svg?style=svg)](https://circleci.com/gh/kepennar/pdfator)
+
+![Logo](doc/pdfator-logo.svg?sanitize=true 'Screen')
+
 ## A simple website to file cli
 
-![Alt text](doc/screen.gif?raw=true 'Screen')
+![Terminal screen](doc/screen.gif?raw=true 'Screen')
 
 Use it with `npx`
 
