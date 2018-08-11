@@ -23,5 +23,6 @@ export default {};
   width: 100%;
   height: 20px;
   background-color: rgba(255, 255, 255, 0.88);
+  outline: 0;
 }
 </style>

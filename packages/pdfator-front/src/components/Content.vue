@@ -63,7 +63,7 @@ export default {
             this.convertingStatus = CONVERTING_STATUS.NONE;
           }, 500);
         })
-        .catch(error => console.log(error));
+        .catch(error => alert(error));
     }
   },
   components: {
