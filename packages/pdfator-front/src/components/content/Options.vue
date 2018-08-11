@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
         <div class="options">
           <input  
             @input="$emit('input-filename', $event.target.value)"

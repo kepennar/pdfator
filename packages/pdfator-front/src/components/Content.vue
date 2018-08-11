@@ -4,25 +4,32 @@
         <url-field 
           @input-url="url = $event"
           class="content__url-field"/>
+       
         <options 
           v-show="showOptions"
           @input-filename="outputFile = $event"
           class="content__options"
         />
-        <actions 
+       
+       <transition name="fade" mode="out-in">
+        <actions v-if="!!lambdaUrl"
           class="content__actions"
           @convert-request="convert"
           @toggle-options="showOptions = $event"
+          :converting-status="convertingStatus"
         />
+       </transition>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import FileSaver from "file-saver";
+
+import { CONVERTING_STATUS } from "../types";
 import UrlField from "./content/UrlField.vue";
 import Options from "./content/Options.vue";
 import Actions from "./content/Actions.vue";
-import FileSaver from "file-saver";
-import axios from "axios";
 
 const CONFIG_URL =
   "https://pdfator-c9101.firebaseio.com/config/prod/lambdaUrl.json";
@@ -32,11 +39,14 @@ export default {
     return {
       showOptions: false,
       url: "",
-      outputFile: ""
+      outputFile: "",
+      lambdaUrl: null,
+      convertingStatus: CONVERTING_STATUS.NONE
     };
   },
   methods: {
     convert() {
+      this.convertingStatus = CONVERTING_STATUS.IN_PROGRESS;
       const params = {
         url: this.url,
         outputFile: this.outputFile,
@@ -45,12 +55,13 @@ export default {
       const filename = this.outputFile || "test";
 
       axios
-        .get(CONFIG_URL)
-        .then(response => {
-          return axios.get(response.data, { params, responseType: "blob" });
-        })
+        .get(this.lambdaUrl, { params, responseType: "blob" })
         .then(response => {
           FileSaver.saveAs(response.data, `${filename}.pdf`);
+          this.convertingStatus = CONVERTING_STATUS.DONE;
+          setTimeout(() => {
+            this.convertingStatus = CONVERTING_STATUS.NONE;
+          }, 2000);
         })
         .catch(error => console.log(error));
     }
@@ -59,6 +70,11 @@ export default {
     urlField: UrlField,
     options: Options,
     actions: Actions
+  },
+  created() {
+    axios.get(CONFIG_URL).then(response => {
+      this.lambdaUrl = response.data;
+    });
   }
 };
 </script>
@@ -89,5 +105,14 @@ export default {
   .content__options {
     width: 50%;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease-out;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
