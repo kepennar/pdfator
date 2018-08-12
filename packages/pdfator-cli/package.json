@@ -1,6 +1,6 @@
 {
   "name": "@pdfator/cli",
-  "version": "1.2.0",
+  "version": "0.0.1-1.3.0.0",
   "description": "",
   "main": "lib/index.js",
   "bin": {
@@ -13,15 +13,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@pdfator/core": "1.2.0",
-    "puppeteer": "^1.5.0",
-    "unzipper": "^0.9.2",
+    "@pdfator/core": "^0.0.1-1.3.0.0",
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
     "figlet": "^1.2.0",
     "inquirer": "^6.0.0",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "puppeteer": "^1.5.0",
+    "unzipper": "^0.9.2"
   },
   "jest": {
     "projects": [

@@ -1,11 +1,13 @@
 {
   "lerna": "2.11.0",
   "packages": [
-    "packages/pdfator-core",
     "packages/pdfator-cli",
-    "packages/pdfator-serverless",
-    "packages/pdfator-front"
+    "packages/pdfator-core",
+    "packages/pdfator-front",
+    "packages/pdfator-serverless"
   ],
-  "nohoist": ["normalize.css*"],
-  "version": "0.0.0"
+  "nohoist": [
+    "normalize.css*"
+  ],
+  "version": "0.0.1-1.3.0.0"
 }
