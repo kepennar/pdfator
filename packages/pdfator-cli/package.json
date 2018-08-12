@@ -1,6 +1,6 @@
 {
   "name": "@pdfator/cli",
-  "version": "0.0.1-1.3.0.0",
+  "version": "0.0.1-1.3.0.1",
   "description": "",
   "main": "lib/index.js",
   "bin": {
@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@pdfator/core": "^0.0.1-1.3.0.0",
+    "@pdfator/core": "^0.0.1-1.3.0.1",
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
