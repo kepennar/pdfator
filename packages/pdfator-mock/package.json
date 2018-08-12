@@ -2,6 +2,7 @@
   "name": "pdfator-mock",
   "version": "0.0.1",
   "description": "Simple pdfator serverless mocks",
+  "private": true,
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
