@@ -41,7 +41,9 @@ export async function convert({ url, outputFile, size, flushToDisk, extension, m
   if (extension === 'PDF') {
     const pdfConfig = {
       ...config,
-      format: size,
+      format: !mobileViewport ? size : undefined,
+      width: mobileViewport ? `${MOBILE_DIMENSION.width}px` : undefined,
+      height: mobileViewport ? `${MOBILE_DIMENSION.height}px` : undefined,
       printBackground: true,
       scale: 0.78,
       margin: { top: '0', right: '0', bottom: '0', left: '0' }
