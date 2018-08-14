@@ -1,6 +1,6 @@
 {
   "name": "@pdfator/core",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "",
   "private": true,
   "main": "dist/index.js",
