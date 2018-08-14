@@ -3,14 +3,7 @@ import { IConverterConfig, PDFATOR_FORMATS } from './pdfator.model';
 import { getBrowser } from './setup';
 import { MOBILE_USERAGENT, MOBILE_DIMENSION, LOADING_TIMEOUT } from './config';
 
-export async function convert({
-  url,
-  outputFile,
-  size,
-  flushToDisk,
-  extension,
-  mobileViewport
-}: IConverterConfig) {
+export async function convert({ url, outputFile, size, flushToDisk, extension, mobileViewport }: IConverterConfig) {
   debug('Attempt to get browser');
 
   const browser = await getBrowser();
@@ -37,25 +30,30 @@ export async function convert({
     debug('Simulate a mobile viewport');
     page.setUserAgent(MOBILE_USERAGENT);
 
-    page.setViewport({
+    await page.setViewport({
       width: MOBILE_DIMENSION.width,
       height: MOBILE_DIMENSION.height,
       isMobile: mobileViewport
     });
   }
 
-  debug('Start conversion with config', config);
   let result: Buffer;
   if (extension === 'PDF') {
-    result = await page.pdf({
+    const pdfConfig = {
       ...config,
       format: size,
       printBackground: true,
       scale: 0.78,
       margin: { top: '0', right: '0', bottom: '0', left: '0' }
-    });
+    };
+    debug('Start PDF conversion with config', pdfConfig);
+
+    result = await page.pdf(pdfConfig);
   } else if (extension === 'PNG') {
-    result = await page.screenshot({ ...config, fullPage: true });
+    const pngConfig = { ...config, fullPage: true };
+    debug('Start PNG conversion with config', pngConfig);
+
+    result = await page.screenshot(pngConfig);
   } else {
     throw new Error(`Unsupported format ${extension}`);
   }
