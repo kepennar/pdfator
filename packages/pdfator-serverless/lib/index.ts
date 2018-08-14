@@ -1,11 +1,4 @@
-import {
-  convert,
-  debug,
-  IConverterConfig,
-  PDFatorFormatKeys,
-  PDFatorSizes,
-  PDFATOR_FORMATS
-} from '@pdfator/core';
+import { convert, debug, IConverterConfig, PDFatorFormatKeys, PDFatorSizes, PDFATOR_FORMATS } from '@pdfator/core';
 import { APIGatewayEvent, Callback, Context } from 'aws-lambda';
 import { S3 } from 'aws-sdk';
 const sha1 = require('sha1');
@@ -28,14 +21,11 @@ const DEFAULT_CONFIG: IConverterConfig = {
   outputFile: 'google.pdf',
   size: 'Letter',
   extension: 'PDF',
+  mobileViewport: false,
   flushToDisk: false
 };
 
-export async function pdfatorHandler(
-  event: APIGatewayEvent,
-  context: Context,
-  callback: Callback
-) {
+export async function pdfatorHandler(event: APIGatewayEvent, context: Context, callback: Callback) {
   debug('Start pdfatorHandler');
 
   // For keeping the browser launch
@@ -89,6 +79,7 @@ function configFromEvent(event: APIGatewayEvent): IConverterConfig {
   return {
     url: query.url || DEFAULT_CONFIG.url,
     outputFile: DEFAULT_CONFIG.outputFile,
+    mobileViewport: query.mobileViewport === 'true',
     size: (query.size || DEFAULT_CONFIG.size) as PDFatorSizes,
     extension: (extension as PDFatorFormatKeys) || DEFAULT_CONFIG.extension,
     flushToDisk: false

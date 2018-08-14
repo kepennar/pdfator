@@ -12,11 +12,18 @@ console.log(
 );
 
 const run = async () => {
-  const config = await askConvertionConfig();
-  const loader = new Spinner(`Converting "${config.url}" please wait...`);
-  loader.start();
-  await convert({ ...config, flushToDisk: true });
-  loader.stop();
+  try {
+    const config = await askConvertionConfig();
+    const loader = new Spinner(`Converting "${config.url}" please wait...`);
+    loader.start();
+    await convert({ ...config, flushToDisk: true });
+    loader.stop();
+  } catch (error) {
+    clear();
+    console.log(
+      chalk.red(figlet.textSync('ERROR', { horizontalLayout: 'full' }))
+    );
+  }
 };
 
 run();
