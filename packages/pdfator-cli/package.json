@@ -1,6 +1,6 @@
 {
-  "name": "pdfator",
-  "version": "1.7.2",
+  "name": "@pdfator/cli",
+  "version": "1.7.3",
   "description": "",
   "publishConfig": {
     "access": "public"
@@ -16,7 +16,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@pdfator/core": "^1.7.2",
+    "@pdfator/core": "^1.7.3",
+    "puppeteer": "1.7.0",
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
@@ -42,5 +43,5 @@
     "type": "git",
     "url": "git@github.com:kepennar/pdfator.git"
   },
-  "gitHead": "2d96cffb453babef612c6ff83ad96ad2993eed1c"
+  "gitHead": "9e67b7c4361921379742da17251004e79b377efc"
 }
