@@ -1,12 +1,15 @@
 {
   "name": "@pdfator/core",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "",
   "main": "dist/index.js",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git@github.com:kepennar/pdfator.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "rm -rf dist && mkdir dist && webpack --mode=production",
@@ -37,5 +40,6 @@
       "/test/"
     ],
     "collectCoverage": true
-  }
+  },
+  "gitHead": "9e67b7c4361921379742da17251004e79b377efc"
 }
