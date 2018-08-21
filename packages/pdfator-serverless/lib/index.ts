@@ -1,4 +1,11 @@
-import { convert, debug, IConverterConfig, PDFatorFormatKeys, PDFatorSizes, PDFATOR_FORMATS } from '@pdfator/core';
+import {
+  convert,
+  debug,
+  IConverterConfig,
+  PDFatorFormatKeys,
+  PDFatorSizes,
+  PDFATOR_FORMATS
+} from '@pdfator/core';
 import { APIGatewayEvent, Callback, Context } from 'aws-lambda';
 import { S3 } from 'aws-sdk';
 const sha1 = require('sha1');
@@ -24,8 +31,13 @@ const DEFAULT_CONFIG: IConverterConfig = {
   mobileViewport: false,
   flushToDisk: false
 };
+const S3_PREFIX = process.env.S3_PREFIX || 'screen-';
 
-export async function pdfatorHandler(event: APIGatewayEvent, context: Context, callback: Callback) {
+export async function pdfatorHandler(
+  event: APIGatewayEvent,
+  context: Context,
+  callback: Callback
+) {
   debug('Start pdfatorHandler');
 
   // For keeping the browser launch
@@ -42,7 +54,7 @@ export async function pdfatorHandler(event: APIGatewayEvent, context: Context, c
 
       objectOutput = await S3Bucket.putObject({
         Bucket: BUCKET_NAME,
-        Key: S3Key,
+        Key: `${S3_PREFIX}${S3Key}`,
         ContentType: PDFATOR_FORMATS[converterConfig.extension].mime,
         Body: result
       }).promise();
