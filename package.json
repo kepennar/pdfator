@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.0",
-    "lerna": "^3.0.0",
+    "lerna": "^2.11.0",
     "prettier": "^1.13.5",
     "tslint-config-prettier": "^1.13.0",
     "tslint-config-standard": "^7.0.0",
