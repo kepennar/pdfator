@@ -114,5 +114,5 @@ function generateS3key({ url, extension, size }: IConverterConfig): string {
 }
 
 function generateUrl(key: string) {
-  return `https://s3.${REGION}.amazonaws.com/${BUCKET_NAME}/${key}`;
+  return `https://s3.${REGION}.amazonaws.com/${BUCKET_NAME}/${S3_PREFIX}${key}`;
 }

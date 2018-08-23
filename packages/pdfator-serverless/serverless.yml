@@ -36,22 +36,33 @@ functions:
 
 resources:
   Resources:
-    PdfatorScreens:
+    S3BucketPdfatorScreens:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.bucket}
         AccessControl: PublicRead
+        # Set the CORS policy
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - HEAD
+              MaxAge: 3000
         LifecycleConfiguration:
           Rules:
             - Id: ScreenExpiration
-              Prefix: ${self:custom.s3Prefix}
               Status: Enabled
               ExpirationInDays: 1
 
-    PdfatorScreensPolicy:
+    S3BucketPdfatorScreensPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
-        Bucket: ${self:custom.bucket}
+        Bucket:
+          Ref: S3BucketPdfatorScreens
         PolicyDocument:
           Statement:
             - Action:
@@ -61,14 +72,8 @@ resources:
                 - arn:aws:s3:::${self:custom.bucket}/*
               Principal: '*'
 
-plugins:
-  - serverless-hooks-plugin
-
 custom:
-  hooks:
-    package:initialize:
-      - npm run package
   bucket: pdfator-screens
   region: eu-west-3
   stage: test
-  s3Prefix: screen-
+  s3Prefix: screen
