@@ -54,7 +54,7 @@ export async function pdfatorHandler(
 
       objectOutput = await S3Bucket.putObject({
         Bucket: BUCKET_NAME,
-        Key: `${S3_PREFIX}${S3Key}`,
+        Key: S3Key,
         ContentType: PDFATOR_FORMATS[converterConfig.extension].mime,
         Body: result
       }).promise();
@@ -110,9 +110,9 @@ async function retrieveFromS3(key: string): Promise<GetS3Output | null> {
 }
 
 function generateS3key({ url, extension, size }: IConverterConfig): string {
-  return sha1(`${url}-${extension}-${size}`);
+  return S3_PREFIX + sha1(`${url}-${extension}-${size}`);
 }
 
 function generateUrl(key: string) {
-  return `https://s3.${REGION}.amazonaws.com/${BUCKET_NAME}/${S3_PREFIX}${key}`;
+  return `https://s3.${REGION}.amazonaws.com/${BUCKET_NAME}/${key}`;
 }
