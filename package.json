@@ -7,7 +7,7 @@
     "package:serverless": "lerna run package --scope='@pdfator/serverless'",
     "deploy:serverless": "lerna run deploy --scope='@pdfator/serverless'",
     "build:all": "npm run build:core && npm run build:serverless",
-    "publish": "lerna publish --npm-tag next"
+    "publish": "npm run build:core && lerna publish"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.0",
