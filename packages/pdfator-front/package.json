@@ -20,6 +20,7 @@
     "@vue/cli-plugin-eslint": "^3.0.0-rc.12",
     "@vue/cli-service": "^3.0.0-rc.12",
     "firebase-tools": "^4.0.3",
+    "prettier": "^1.14.2",
     "vue-template-compiler": "^2.5.16"
   },
   "eslintConfig": {

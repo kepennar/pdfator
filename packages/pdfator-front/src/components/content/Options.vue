@@ -1,38 +1,72 @@
 <template>
     <div >
-        <div class="options">
-          <input  
-            @input="$emit('input-filename', $event.target.value)"
-            class="input" 
-            type="text" 
-            id="filename" 
-            placeholder="Filename"
-          >
-          <label 
-            class="label" 
-            for="filename"
-          >
-            Filename
-          </label>
-        </div>
-      <!-- <div class="options">
-        <select class="options__select" name="" id="format" ></select>
-        <label class="options__label" for="format">Format</label>
-      </div> -->
+      <div class="options">
+        <input  
+          @input="$emit('input-filename', $event.target.value)"
+          class="input" 
+          type="text" 
+          id="filename" 
+          placeholder="Filename"
+        >
+        <label 
+          class="label" 
+          for="filename">
+          Filename
+        </label>
+      </div>
+      <div class="options">
+        <select 
+          v-model="format"
+          class="options__select" 
+          id="format" 
+        >
+          <option v-for="(format,index) in formatTypes" :key="index">
+            {{ format }}
+          </option>
+        </select>
+        <!-- <label class="options__label" for="format">Format</label> -->
+      </div> 
+      <div class="options">
+        <select 
+          v-model="size"
+          class="options__select" 
+          id="size" 
+        >
+          <option v-for="(size,index) in sizeTypes" :key="index">
+            {{ size }}
+          </option>
+        </select>
+        <!-- <label class="options__label" for="size">Size</label> -->
+      </div> 
     </div>
 </template>
 
 <script>
-export default {};
+import { CONVERTING_FORMAT } from "../../types";
+import { CONVERTING_SIZE } from "../../types";
+
+export default {
+  data() {
+    return {
+      formatTypes: CONVERTING_FORMAT,
+      format: "PDF",
+      sizeTypes: CONVERTING_SIZE,
+      size: "Letter"
+    };
+  }
+};
 </script>
 
 <style scoped>
 .content__options {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(225, 190, 231, 0.09);
+  flex-flow: row wrap;
 }
+
 .options {
   position: relative;
-  padding-top: 1.5em;
+  padding: 14px;
+  flex: 1 100%;
 }
 .label {
   position: absolute;
@@ -42,16 +76,30 @@ export default {};
   transform: translateY(0);
   transition: all 0.2s ease-out;
 }
-.input {
+
+.input,
+.options__select {
+  background-color: rgba(255, 255, 255, 0.88);
   border-radius: 5px;
   border: 2px solid #609;
-  padding: 20px;
-  margin: auto auto 20px 20px;
+  box-sizing: border-box;
+  height: 40px;
+  padding: 8px;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.88);
 }
 .input:placeholder-shown + label {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translate(10px, 10px);
+}
+
+@media only screen and (min-width: 601px) {
+  .content__options {
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 35%;
+  }
+  .options {
+    flex: 0 1 auto;
+  }
 }
 </style>

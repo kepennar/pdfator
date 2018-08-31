@@ -7,7 +7,7 @@
        
         <options 
           v-show="showOptions"
-          @input-filename="outputFile = $event"
+          @input-filename="options.outputFile = $event"
           class="content__options"
         />
        
@@ -39,7 +39,11 @@ export default {
     return {
       showOptions: false,
       url: "",
-      outputFile: "",
+      options: {
+        outputFile: "",
+        format: "PDF",
+        size: "Letter"
+      },
       lambdaUrl: null,
       convertingStatus: CONVERTING_STATUS.NONE
     };
@@ -49,15 +53,16 @@ export default {
       this.convertingStatus = CONVERTING_STATUS.IN_PROGRESS;
       const params = {
         url: this.url,
-        outputFile: this.outputFile,
-        format: ""
+        outputFile: this.options.outputFile,
+        format: this.options.format,
+        size: this.options.size
       };
       const filename = this.outputFile || "file";
 
       axios
         .get(this.lambdaUrl, { params, responseType: "blob" })
         .then(response => {
-          FileSaver.saveAs(response.data, `${filename}.pdf`);
+          FileSaver.saveAs(response.data, `${filename}.${format}`);
           this.convertingStatus = CONVERTING_STATUS.DONE;
           setTimeout(() => {
             this.convertingStatus = CONVERTING_STATUS.NONE;
@@ -104,6 +109,7 @@ export default {
   .content__actions,
   .content__options {
     width: 50%;
+    min-width: 400px;
   }
 }
 
