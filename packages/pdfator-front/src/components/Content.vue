@@ -1,11 +1,11 @@
 <template>
 
     <div class="section content">
-        <url-field 
+        <pdfator-url-field 
           @input-url="url = $event"
           class="content__url-field"/>
        
-        <options 
+        <pdfator-options 
           v-show="showOptions"
           @filename-updated="options.outputFile = $event"
           @format-selected="options.format = $event"
@@ -14,7 +14,7 @@
         />
        
        <transition name="fade" mode="out-in">
-        <actions v-if="!!lambdaUrl"
+        <pdfator-actions v-if="!!lambdaUrl"
           class="content__actions"
           @convert-request="convert"
           @toggle-options="showOptions = $event"
@@ -77,9 +77,9 @@ export default {
     }
   },
   components: {
-    urlField: UrlField,
-    options: Options,
-    actions: Actions
+    pdfatorUrlField: UrlField,
+    pdfatorOptions: Options,
+    pdfatorActions: Actions
   },
   created() {
     axios.get(CONFIG_URL).then(response => {
