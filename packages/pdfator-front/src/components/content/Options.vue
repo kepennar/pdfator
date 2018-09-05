@@ -68,7 +68,7 @@ export default {
 
 .options {
   position: relative;
-  padding: 14px;
+  padding: 20px 14px 14px;
   flex: 1 100%;
 }
 .label {
