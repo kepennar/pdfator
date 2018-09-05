@@ -7,7 +7,9 @@
        
         <options 
           v-show="showOptions"
-          @input-filename="options.outputFile = $event"
+          @filename-updated="options.outputFile = $event"
+          @format-selected="options.format = $event"
+          @size-selected="options.size = $event"
           class="content__options"
         />
        
@@ -26,7 +28,7 @@
 import axios from "axios";
 import FileSaver from "file-saver";
 
-import { CONVERTING_STATUS } from "../types";
+import { CONVERTING_STATUS, MIME_TO_EXTENSION } from "../types";
 import UrlField from "./content/UrlField.vue";
 import Options from "./content/Options.vue";
 import Actions from "./content/Actions.vue";
@@ -41,8 +43,8 @@ export default {
       url: "",
       options: {
         outputFile: "",
-        format: "PDF",
-        size: "Letter"
+        format: "",
+        size: ""
       },
       lambdaUrl: null,
       convertingStatus: CONVERTING_STATUS.NONE
@@ -53,16 +55,19 @@ export default {
       this.convertingStatus = CONVERTING_STATUS.IN_PROGRESS;
       const params = {
         url: this.url,
-        outputFile: this.options.outputFile,
-        format: this.options.format,
-        size: this.options.size
+        outputFile: this.options.outputFile || "file",
+        format: this.options.format || "PDF",
+        size: this.options.size || "Letter"
       };
-      const filename = this.outputFile || "file";
-
       axios
         .get(this.lambdaUrl, { params, responseType: "blob" })
         .then(response => {
-          FileSaver.saveAs(response.data, `${filename}.${format}`);
+          const mime = response.headers["content-type"];
+
+          FileSaver.saveAs(
+            response.data,
+            `${params.outputFile}${MIME_TO_EXTENSION[mime]}`
+          );
           this.convertingStatus = CONVERTING_STATUS.DONE;
           setTimeout(() => {
             this.convertingStatus = CONVERTING_STATUS.NONE;

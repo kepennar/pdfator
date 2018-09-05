@@ -8,7 +8,7 @@ export const CONVERTING_FORMAT = ["PDF", "PNG"];
 export const CONVERTING_SIZE = [
   "Letter",
   "Legal",
-  "Tabload",
+  "Tabloid",
   "Ledger",
   "A0",
   "A1",
@@ -17,3 +17,8 @@ export const CONVERTING_SIZE = [
   "A4",
   "A5"
 ];
+
+export const MIME_TO_EXTENSION = {
+  "application/pdf": ".pdf",
+  "image/png": ".png"
+};

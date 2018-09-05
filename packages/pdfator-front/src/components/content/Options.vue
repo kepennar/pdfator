@@ -1,8 +1,9 @@
 <template>
     <div >
+      <!-- file name -->
       <div class="options">
         <input  
-          @input="$emit('input-filename', $event.target.value)"
+          @change="$emit('filename-updated', $event.target.value)"
           class="input" 
           type="text" 
           id="filename" 
@@ -14,29 +15,31 @@
           Filename
         </label>
       </div>
+      <!-- file format -->
       <div class="options">
         <select 
-          v-model="format"
           class="options__select" 
           id="format" 
+          v-model="format"
+          @change="$emit('format-selected', $event.target.value)"
         >
-          <option v-for="(format,index) in formatTypes" :key="index">
+          <option v-for="(format,index) in formatTypes" :value="format" :key="index">
             {{ format }}
           </option>
         </select>
-        <!-- <label class="options__label" for="format">Format</label> -->
       </div> 
+      <!-- file size  -->
       <div class="options">
         <select 
-          v-model="size"
           class="options__select" 
           id="size" 
+          v-model="size"
+          @change="$emit('size-selected', $event.target.value)"
         >
-          <option v-for="(size,index) in sizeTypes" :key="index">
+          <option v-for="(size,index) in sizeTypes" :value="size" :key="index">
             {{ size }}
           </option>
         </select>
-        <!-- <label class="options__label" for="size">Size</label> -->
       </div> 
     </div>
 </template>
