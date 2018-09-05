@@ -21,7 +21,7 @@ export default {};
   border: 2px solid #609;
   padding: 20px;
   width: 100%;
-  height: 20px;
+  height: 10px;
   background-color: rgba(255, 255, 255, 0.88);
   outline: 0;
 }
