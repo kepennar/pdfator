@@ -62,17 +62,18 @@ export default {
 </script>
 
 <style scoped>
+.content__actions {
+  margin-bottom: 10px;
+}
 .arrow {
   width: 100%;
   max-width: 20px;
   margin: 0 0.5em;
   cursor: pointer;
 }
-
 .arrow--up {
   transform: rotateX(180deg);
 }
-
 .btn-convert {
   border-radius: 5px;
   border: none;

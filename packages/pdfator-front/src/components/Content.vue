@@ -92,7 +92,7 @@ export default {
 <style>
 .content {
   background-color: #1d0c4c;
-  height: 60vh;
+  min-height: 60vh;
   flex-flow: column;
 }
 
