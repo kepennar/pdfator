@@ -6,7 +6,7 @@ function askConvertionConfig() {
       name: 'url',
       type: 'input',
       message: 'Enter the website url you want to convert.',
-      default: 'https://google.fr',
+      default: 'https://www.google.fr/',
       validate: value => {
         if (value.length) {
           return true;
@@ -55,6 +55,11 @@ function askConvertionConfig() {
           return 'Please the wanted output size.';
         }
       }
+    },
+    {
+      name: 'mobileViewport',
+      type: 'confirm',
+      message: 'Simulate a mobile viewport ?'
     }
   ];
   return prompt(questions);

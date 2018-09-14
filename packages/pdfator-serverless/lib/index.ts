@@ -28,8 +28,10 @@ const DEFAULT_CONFIG: IConverterConfig = {
   outputFile: 'google.pdf',
   size: 'Letter',
   extension: 'PDF',
+  mobileViewport: false,
   flushToDisk: false
 };
+const S3_PREFIX = process.env.S3_PREFIX || 'screen-';
 
 export async function pdfatorHandler(
   event: APIGatewayEvent,
@@ -89,6 +91,7 @@ function configFromEvent(event: APIGatewayEvent): IConverterConfig {
   return {
     url: query.url || DEFAULT_CONFIG.url,
     outputFile: DEFAULT_CONFIG.outputFile,
+    mobileViewport: query.mobileViewport === 'true',
     size: (query.size || DEFAULT_CONFIG.size) as PDFatorSizes,
     extension: (extension as PDFatorFormatKeys) || DEFAULT_CONFIG.extension,
     flushToDisk: false
@@ -107,7 +110,7 @@ async function retrieveFromS3(key: string): Promise<GetS3Output | null> {
 }
 
 function generateS3key({ url, extension, size }: IConverterConfig): string {
-  return sha1(`${url}-${extension}-${size}`);
+  return S3_PREFIX + sha1(`${url}-${extension}-${size}`);
 }
 
 function generateUrl(key: string) {

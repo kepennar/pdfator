@@ -1,4 +1,4 @@
-service: pdfator 
+service: pdfator
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -15,7 +15,7 @@ provider:
     - Effect: Allow
       Action:
         - s3:PutObject
-      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+      Resource: 'arn:aws:s3:::${self:custom.bucket}/*'
 
 package:
   artifact: ./package.zip
@@ -29,40 +29,51 @@ functions:
           method: get
           cors: true
     environment:
-      LOCAL_CHROME: "true"
-      DEBUG: "true"
+      LOCAL_CHROME: 'true'
+      DEBUG: 'true'
       BUCKET: ${self:custom.bucket}
+      S3_PREFIX: ${self:custom.s3Prefix}
 
 resources:
   Resources:
-    ServerlesslyRedirectS3Bucket:
+    S3BucketPdfatorScreens:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.bucket}
         AccessControl: PublicRead
-        WebsiteConfiguration:
-          IndexDocument: index.html
-    ServerlesslyRedirectS3BucketPolicy:
+        # Set the CORS policy
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - HEAD
+              MaxAge: 3000
+        LifecycleConfiguration:
+          Rules:
+            - Id: ScreenExpiration
+              Status: Enabled
+              ExpirationInDays: 1
+
+    S3BucketPdfatorScreensPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
-        Bucket: ${self:custom.bucket}
+        Bucket:
+          Ref: S3BucketPdfatorScreens
         PolicyDocument:
           Statement:
-          - Action:
-            - s3:GetObject
-            Effect: Allow
-            Resource:
-            - arn:aws:s3:::${self:custom.bucket}/*
-            Principal: "*"
-
-plugins:
-  - serverless-hooks-plugin
+            - Action:
+                - s3:GetObject
+              Effect: Allow
+              Resource:
+                - arn:aws:s3:::${self:custom.bucket}/*
+              Principal: '*'
 
 custom:
-  hooks:
-    package:initialize:
-      - npm run package
   bucket: pdfator-screens
   region: eu-west-3
   stage: test
-
+  s3Prefix: screen

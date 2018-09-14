@@ -1,11 +1,12 @@
 import * as puppeteer from 'puppeteer';
 
 export interface IConverterConfig {
-  url: string;
+  extension: PDFatorFormatKeys;
+  flushToDisk: boolean;
+  mobileViewport: boolean;
   outputFile: string;
   size: PDFatorSizes;
-  flushToDisk: boolean;
-  extension: PDFatorFormatKeys;
+  url: string;
 }
 
 export type PDFatorSizes = puppeteer.PDFFormat;
@@ -19,6 +20,7 @@ export interface IPdfatorFormat {
   mime: string;
   type: PDFatorFormatKeys;
 }
+
 export const PDFATOR_FORMATS: IPdfatorFormats = {
   PDF: {
     extension: '.pdf',
