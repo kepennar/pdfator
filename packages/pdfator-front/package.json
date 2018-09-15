@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "predeploy": "npm run lint && npm run build",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -17,6 +19,8 @@
     "@vue/cli-plugin-babel": "^3.0.0-rc.12",
     "@vue/cli-plugin-eslint": "^3.0.0-rc.12",
     "@vue/cli-service": "^3.0.0-rc.12",
+    "firebase-tools": "^4.0.3",
+    "prettier": "^1.14.2",
     "vue-template-compiler": "^2.5.16"
   },
   "eslintConfig": {

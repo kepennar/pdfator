@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <app-header></app-header>
-    <app-content></app-content>
-    <app-footer></app-footer>
+    <pdfator-header></pdfator-header>
+    <pdfator-content></pdfator-content>
+    <pdfator-footer></pdfator-footer>
   </div>
 </template>
 
@@ -14,9 +14,9 @@ import Content from "./components/Content.vue";
 export default {
   name: "app",
   components: {
-    appHeader: Header,
-    appFooter: Footer,
-    appContent: Content
+    pdfatorHeader: Header,
+    pdfatorFooter: Footer,
+    pdfatorContent: Content
   }
 };
 </script>

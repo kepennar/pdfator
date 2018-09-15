@@ -1,28 +1,37 @@
 <template>
 
     <div class="section content">
-        <url-field 
+        <pdfator-url-field 
           @input-url="url = $event"
           class="content__url-field"/>
-        <options 
+       
+        <pdfator-options 
           v-show="showOptions"
-          @input-filename="outputFile = $event"
+          @filename-updated="options.outputFile = $event"
+          @format-selected="options.format = $event"
+          @size-selected="options.size = $event"
           class="content__options"
         />
-        <actions 
+       
+       <transition name="fade" mode="out-in">
+        <pdfator-actions v-if="!!lambdaUrl"
           class="content__actions"
           @convert-request="convert"
           @toggle-options="showOptions = $event"
+          :converting-status="convertingStatus"
         />
+       </transition>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import FileSaver from "file-saver";
+
+import { CONVERTING_STATUS, MIME_TO_EXTENSION } from "../types";
 import UrlField from "./content/UrlField.vue";
 import Options from "./content/Options.vue";
 import Actions from "./content/Actions.vue";
-import FileSaver from "file-saver";
-import axios from "axios";
 
 const CONFIG_URL =
   "https://pdfator-c9101.firebaseio.com/config/prod/lambdaUrl.json";
@@ -32,33 +41,50 @@ export default {
     return {
       showOptions: false,
       url: "",
-      outputFile: ""
+      options: {
+        outputFile: "",
+        format: "",
+        size: ""
+      },
+      lambdaUrl: null,
+      convertingStatus: CONVERTING_STATUS.NONE
     };
   },
   methods: {
     convert() {
+      this.convertingStatus = CONVERTING_STATUS.IN_PROGRESS;
       const params = {
         url: this.url,
-        outputFile: this.outputFile,
-        format: ""
+        outputFile: this.options.outputFile || "file",
+        format: this.options.format || "PDF",
+        size: this.options.size || "Letter"
       };
-      const filename = this.outputFile || "test";
-
       axios
-        .get(CONFIG_URL)
+        .get(this.lambdaUrl, { params, responseType: "blob" })
         .then(response => {
-          return axios.get(response.data, { params, responseType: "blob" });
+          const mime = response.headers["content-type"];
+
+          FileSaver.saveAs(
+            response.data,
+            `${params.outputFile}${MIME_TO_EXTENSION[mime]}`
+          );
+          this.convertingStatus = CONVERTING_STATUS.DONE;
+          setTimeout(() => {
+            this.convertingStatus = CONVERTING_STATUS.NONE;
+          }, 500);
         })
-        .then(response => {
-          FileSaver.saveAs(response.data, `${filename}.pdf`);
-        })
-        .catch(error => console.log(error));
+        .catch(error => alert(error));
     }
   },
   components: {
-    urlField: UrlField,
-    options: Options,
-    actions: Actions
+    pdfatorUrlField: UrlField,
+    pdfatorOptions: Options,
+    pdfatorActions: Actions
+  },
+  created() {
+    axios.get(CONFIG_URL).then(response => {
+      this.lambdaUrl = response.data;
+    });
   }
 };
 </script>
@@ -66,7 +92,7 @@ export default {
 <style>
 .content {
   background-color: #1d0c4c;
-  height: 60vh;
+  min-height: 60vh;
   flex-flow: column;
 }
 
@@ -88,6 +114,16 @@ export default {
   .content__actions,
   .content__options {
     width: 50%;
+    min-width: 400px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease-out;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

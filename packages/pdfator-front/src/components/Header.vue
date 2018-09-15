@@ -21,6 +21,7 @@ export default {};
 .header {
   flex-flow: row wrap;
   background-color: #3b0754;
+  min-height: 30vh;
 }
 .header__title {
   flex: 1 100%;
