@@ -4,41 +4,43 @@ import {
   IConverterConfig,
   PDFatorFormatKeys,
   PDFatorSizes,
-  PDFATOR_FORMATS
-} from '@pdfator/core';
-import { APIGatewayEvent, Callback, Context } from 'aws-lambda';
-import { S3 } from 'aws-sdk';
-const sha1 = require('sha1');
+  PDFATOR_FORMATS,
+} from "@pdfator/core";
+import { APIGatewayEvent, Callback, Context } from "aws-lambda";
+import { S3 } from "aws-sdk";
+import sha1 from "sha1";
+
+import { getChromiumBrowser } from "./chromium";
 
 type PutS3Output = S3.Types.PutObjectOutput;
 type GetS3Output = S3.Types.GetObjectOutput;
 
 const S3Bucket = new S3({
-  signatureVersion: 'v4'
+  signatureVersion: "v4",
 });
 
-const REGION = process.env.REGION || 'eu-west-3';
-const BUCKET_NAME = process.env.BUCKET || '';
+const REGION = process.env.REGION || "eu-west-3";
+const BUCKET_NAME = process.env.BUCKET || "";
 if (!BUCKET_NAME) {
   throw new Error('"process.env.BUCKET" is mandatory');
 }
 
 const DEFAULT_CONFIG: IConverterConfig = {
-  url: 'https://google.fr',
-  outputFile: 'google.pdf',
-  size: 'Letter',
-  extension: 'PDF',
+  url: "https://google.fr",
+  outputFile: "google.pdf",
+  size: "Letter",
+  extension: "PDF",
   mobileViewport: false,
-  flushToDisk: false
+  flushToDisk: false,
 };
-const S3_PREFIX = process.env.S3_PREFIX || 'screen-';
+const S3_PREFIX = process.env.S3_PREFIX || "screen-";
 
 export async function pdfatorHandler(
   event: APIGatewayEvent,
   context: Context,
   callback: Callback
 ) {
-  debug('Start pdfatorHandler');
+  debug("Start pdfatorHandler");
 
   // For keeping the browser launch
   context.callbackWaitsForEmptyEventLoop = false;
@@ -49,14 +51,14 @@ export async function pdfatorHandler(
     let objectOutput: PutS3Output | null = await retrieveFromS3(S3Key);
 
     if (!objectOutput) {
-      debug('Call converter with config', converterConfig);
+      debug("Call converter with config", converterConfig);
       const result = await convertWebpage(converterConfig);
 
       objectOutput = await S3Bucket.putObject({
         Bucket: BUCKET_NAME,
         Key: S3Key,
         ContentType: PDFATOR_FORMATS[converterConfig.extension].mime,
-        Body: result
+        Body: result,
       }).promise();
     }
 
@@ -64,9 +66,10 @@ export async function pdfatorHandler(
       statusCode: 301,
       headers: {
         location: generateUrl(S3Key),
-        'Access-Control-Allow-Origin': '*'
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
-      body: ''
+      body: "",
     };
     callback(null, response);
   } catch (err) {
@@ -74,8 +77,11 @@ export async function pdfatorHandler(
   }
 }
 
-export function convertWebpage(config: IConverterConfig = DEFAULT_CONFIG) {
-  return convert(config);
+export async function convertWebpage(
+  config: IConverterConfig = DEFAULT_CONFIG
+) {
+  const browser = await getChromiumBrowser();
+  return convert(browser, config);
 }
 
 function configFromEvent(event: APIGatewayEvent): IConverterConfig {
@@ -84,24 +90,24 @@ function configFromEvent(event: APIGatewayEvent): IConverterConfig {
     return DEFAULT_CONFIG;
   }
   const extension = query.extension;
-  if (extension && !['PDF', 'PNG'].includes(extension)) {
+  if (extension && !["PDF", "PNG"].includes(extension)) {
     throw new Error('extension have to be one of "PDF", "PNG"');
   }
 
   return {
     url: query.url || DEFAULT_CONFIG.url,
     outputFile: DEFAULT_CONFIG.outputFile,
-    mobileViewport: query.mobileViewport === 'true',
+    mobileViewport: query.mobileViewport === "true",
     size: (query.size || DEFAULT_CONFIG.size) as PDFatorSizes,
     extension: (extension as PDFatorFormatKeys) || DEFAULT_CONFIG.extension,
-    flushToDisk: false
+    flushToDisk: false,
   };
 }
 async function retrieveFromS3(key: string): Promise<GetS3Output | null> {
   try {
     return await S3Bucket.getObject({
       Bucket: BUCKET_NAME,
-      Key: key
+      Key: key,
     }).promise();
   } catch (error) {
     debug(error);

@@ -2,20 +2,20 @@
  * Heavily inspired from https://github.com/sambaiz/puppeteer-lambda-starter-kit/
  */
 
-import { createReadStream, stat, access, exists, constants, chmod } from 'fs';
-import { resolve } from 'path';
-import { promisify } from 'util';
-import { Extract } from 'unzipper';
-import * as puppeteer from 'puppeteer';
+import { createReadStream, stat, access, exists, constants, chmod } from "fs";
+import { resolve } from "path";
+import { promisify } from "util";
+import { Extract } from "unzipper";
+import * as puppeteer from "puppeteer";
 
 import {
   localChromePath,
   setupChromePath,
   executablePath,
   DEBUG,
-  WITH_LOCAL_CHROME
-} from './config';
-import { debug } from './Logger';
+  WITH_LOCAL_CHROME,
+} from "./config";
+import { debug } from "./Logger";
 
 const statPromise = promisify(stat);
 const accessPromise = promisify(access);
@@ -26,28 +26,29 @@ export const getBrowser = (() => {
   let browser: puppeteer.Browser;
   return async () => {
     if (
-      typeof browser === 'undefined' ||
+      typeof browser === "undefined" ||
       !(await isBrowserAvailable(browser))
     ) {
       if (WITH_LOCAL_CHROME) {
         await setupLocalChrome();
-        debug('Local Chrome setuped');
+        debug("Local Chrome setuped");
       }
-      const puppeterConfig: puppeteer.LaunchOptions = {
+      const puppeteerConfig: puppeteer.LaunchOptions = {
         headless: true,
         args: [
           // error when launch(); No usable sandbox! Update your kernel
-          '--no-sandbox',
+          "--no-sandbox",
           // error when launch(); Failed to load libosmesa.so
-          '--disable-gpu',
+          // "--disable-gpu",
           // freeze when newPage()
-          '--single-process'
+          // "--single-process",
         ],
         dumpio: DEBUG,
-        ...(WITH_LOCAL_CHROME ? { executablePath } : null)
+        pipe: true,
+        ...(WITH_LOCAL_CHROME ? { executablePath } : null),
       };
-      debug(puppeterConfig);
-      browser = await puppeteer.launch(puppeterConfig);
+      debug(puppeteerConfig);
+      browser = await puppeteer.launch(puppeteerConfig);
       const browserVersion = await browser.version();
       debug(`launch done: ${browserVersion}`);
     }
@@ -68,11 +69,11 @@ async function isBrowserAvailable(browser: puppeteer.Browser) {
 async function setupLocalChrome() {
   const exists = await existsPromise(executablePath);
   if (exists) {
-    debug('Executable Chrome already exists with path', executablePath);
+    debug("Executable Chrome already exists with path", executablePath);
     return;
   }
   debug(
-    'Setup local chrome with zipPath and setupPath',
+    "Setup local chrome with zipPath and setupPath",
     localChromePath,
     setupChromePath
   );

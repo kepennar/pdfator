@@ -1,68 +1,68 @@
-const { prompt } = require('inquirer');
+const { prompt } = require("inquirer");
 
-function askConvertionConfig() {
+function askConversionConfig() {
   const questions = [
     {
-      name: 'url',
-      type: 'input',
-      message: 'Enter the website url you want to convert.',
-      default: 'https://www.google.fr/',
-      validate: value => {
+      name: "url",
+      type: "input",
+      message: "Enter the website url you want to convert.",
+      default: "https://www.google.fr/",
+      validate: (value) => {
         if (value.length) {
           return true;
         } else {
-          return 'Please enter the website url you want to convert.';
+          return "Please enter the website url you want to convert.";
         }
-      }
+      },
     },
     {
-      name: 'outputFile',
-      type: 'input',
-      message: 'Enter the output filename',
-      default: 'out',
-      validate: value => {
+      name: "outputFile",
+      type: "input",
+      message: "Enter the output filename",
+      default: "out",
+      validate: (value) => {
         if (value.length) {
           return true;
         } else {
-          return 'Please enter the output filename';
+          return "Please enter the output filename";
         }
-      }
+      },
     },
     {
-      name: 'extension',
-      type: 'list',
-      message: 'Choose the desired file format',
-      choices: ['PDF', 'PNG'],
-      default: 'PDF',
-      validate: value => {
+      name: "extension",
+      type: "list",
+      message: "Choose the desired file format",
+      choices: ["PDF", "PNG"],
+      default: "PDF",
+      validate: (value) => {
         if (value.length) {
           return true;
         } else {
-          return 'Please the desired file format.';
+          return "Please the desired file format.";
         }
-      }
+      },
     },
     {
-      name: 'size',
-      type: 'list',
-      message: 'Enter the wanted output size.',
-      choices: ['A4', 'A3', 'letter'],
-      default: 'A4',
-      validate: value => {
+      name: "size",
+      type: "list",
+      message: "Enter the wanted output size.",
+      choices: ["A4", "A3", "letter"],
+      default: "A4",
+      validate: (value) => {
         if (value.length) {
           return true;
         } else {
-          return 'Please the wanted output size.';
+          return "Please the wanted output size.";
         }
-      }
+      },
     },
     {
-      name: 'mobileViewport',
-      type: 'confirm',
-      message: 'Simulate a mobile viewport ?'
-    }
+      name: "mobileViewport",
+      type: "confirm",
+      message: "Simulate a mobile viewport ?",
+    },
   ];
   return prompt(questions);
 }
 
-module.exports = { askConvertionConfig };
+module.exports = { askConversionConfig };

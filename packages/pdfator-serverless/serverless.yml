@@ -1,3 +1,5 @@
+org: kepennar
+app: myapp-dev
 service: pdfator
 
 # You can pin your service to only deploy with a specific Serverless version
@@ -6,7 +8,7 @@ service: pdfator
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   memorySize: 1536
   timeout: 180
   region: ${self:custom.region}
@@ -15,10 +17,11 @@ provider:
     - Effect: Allow
       Action:
         - s3:PutObject
-      Resource: 'arn:aws:s3:::${self:custom.bucket}/*'
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
 
 package:
   artifact: ./package.zip
+  individually: true
 
 functions:
   pdfator:
@@ -29,8 +32,7 @@ functions:
           method: get
           cors: true
     environment:
-      LOCAL_CHROME: 'true'
-      DEBUG: 'true'
+      DEBUG: "true"
       BUCKET: ${self:custom.bucket}
       S3_PREFIX: ${self:custom.s3Prefix}
 
@@ -45,9 +47,9 @@ resources:
         CorsConfiguration:
           CorsRules:
             - AllowedOrigins:
-                - '*'
+                - "*"
               AllowedHeaders:
-                - '*'
+                - "*"
               AllowedMethods:
                 - GET
                 - HEAD
@@ -70,7 +72,7 @@ resources:
               Effect: Allow
               Resource:
                 - arn:aws:s3:::${self:custom.bucket}/*
-              Principal: '*'
+              Principal: "*"
 
 custom:
   bucket: pdfator-screens
