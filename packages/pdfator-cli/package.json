@@ -1,6 +1,6 @@
 {
   "name": "@pdfator/cli",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "",
   "publishConfig": {
     "access": "public"
@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@pdfator/core": "^1.8.0",
+    "@pdfator/core": "^1.9.0",
     "chalk": "^4.1.0",
     "clear": "^0.1.0",
     "clui": "^0.3.6",

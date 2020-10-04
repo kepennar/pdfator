@@ -1,6 +1,6 @@
 {
   "name": "@pdfator/front",
-  "version": "1.7.6",
+  "version": "1.9.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
