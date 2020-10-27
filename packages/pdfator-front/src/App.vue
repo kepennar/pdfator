@@ -6,20 +6,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
 import Header from "./components/Header.vue";
-import Footer from "./components/Footer.vue";
 import Content from "./components/Content.vue";
+import Footer from "./components/Footer.vue";
 
-export default {
-  name: "app",
+@Options({
   components: {
     pdfatorHeader: Header,
     pdfatorFooter: Footer,
-    pdfatorContent: Content
-  }
-};
+    pdfatorContent: Content,
+  },
+})
+export default class App extends Vue {}
 </script>
+
 <style>
 @import "~normalize.css";
 
