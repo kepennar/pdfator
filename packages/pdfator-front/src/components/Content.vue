@@ -1,92 +1,102 @@
 <template>
+  <div class="section content">
+    <pdfator-url-field @input-url="url = $event" class="content__url-field" />
 
-    <div class="section content">
-        <pdfator-url-field 
-          @input-url="url = $event"
-          class="content__url-field"/>
-       
-        <pdfator-options 
-          v-show="showOptions"
-          @filename-updated="options.outputFile = $event"
-          @format-selected="options.format = $event"
-          @size-selected="options.size = $event"
-          class="content__options"
-        />
-       
-       <transition name="fade" mode="out-in">
-        <pdfator-actions v-if="!!lambdaUrl"
-          class="content__actions"
-          @convert-request="convert"
-          @toggle-options="showOptions = $event"
-          :converting-status="convertingStatus"
-        />
-       </transition>
-    </div>
+    <pdfator-options
+      v-show="showOptions"
+      @filename-updated="options.outputFile = $event"
+      @format-selected="options.format = $event"
+      @size-selected="options.size = $event"
+      class="content__options"
+    />
+
+    <transition name="fade" mode="out-in">
+      <pdfator-actions
+        v-if="!!lambdaUrl"
+        class="content__actions"
+        @convert-request="convert"
+        @toggle-options="showOptions = $event"
+        :converting-status="convertingStatus"
+      />
+    </transition>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Options } from "vue-class-component";
+
 import axios from "axios";
 import FileSaver from "file-saver";
 
-import { CONVERTING_STATUS, MIME_TO_EXTENSION } from "../types";
+import {
+  CONVERTING_STATUS,
+  MIME_TO_EXTENSION,
+  isSupportedMime,
+} from "../types";
 import UrlField from "./content/UrlField.vue";
-import Options from "./content/Options.vue";
+import RenderingOptions from "./content/RenderingOptions.vue";
 import Actions from "./content/Actions.vue";
 
 const CONFIG_URL =
   "https://pdfator-c9101.firebaseio.com/config/prod/lambdaUrl.json";
 
-export default {
-  data() {
-    return {
-      showOptions: false,
-      url: "",
-      options: {
-        outputFile: "",
-        format: "",
-        size: ""
-      },
-      lambdaUrl: null,
-      convertingStatus: CONVERTING_STATUS.NONE
-    };
-  },
-  methods: {
-    convert() {
-      this.convertingStatus = CONVERTING_STATUS.IN_PROGRESS;
-      const params = {
-        url: this.url,
-        outputFile: this.options.outputFile || "file",
-        format: this.options.format || "PDF",
-        size: this.options.size || "Letter"
-      };
-      axios
-        .get(this.lambdaUrl, { params, responseType: "blob" })
-        .then(response => {
-          const mime = response.headers["content-type"];
-
-          FileSaver.saveAs(
-            response.data,
-            `${params.outputFile}${MIME_TO_EXTENSION[mime]}`
-          );
-          this.convertingStatus = CONVERTING_STATUS.DONE;
-          setTimeout(() => {
-            this.convertingStatus = CONVERTING_STATUS.NONE;
-          }, 500);
-        })
-        .catch(error => alert(error));
-    }
-  },
+@Options({
   components: {
     pdfatorUrlField: UrlField,
-    pdfatorOptions: Options,
-    pdfatorActions: Actions
+    pdfatorOptions: RenderingOptions,
+    pdfatorActions: Actions,
   },
+})
+export default class Content extends Vue {
+  showOptions = false;
+  url = "";
+  options = {
+    outputFile: "",
+    format: "",
+    size: "",
+  };
+  lambdaUrl: string | null = null;
+  convertingStatus = CONVERTING_STATUS.NONE;
+
   created() {
-    axios.get(CONFIG_URL).then(response => {
+    axios.get(CONFIG_URL).then((response) => {
       this.lambdaUrl = response.data;
     });
   }
-};
+
+  convert() {
+    if (!this.lambdaUrl) {
+      console.warn("Not ready yet");
+      return;
+    }
+    this.convertingStatus = CONVERTING_STATUS.IN_PROGRESS;
+    const params = {
+      url: this.url,
+      outputFile: this.options.outputFile || "file",
+      format: this.options.format || "PDF",
+      size: this.options.size || "Letter",
+    };
+    axios
+      .get(this.lambdaUrl, { params, responseType: "blob" })
+      .then((response) => {
+        const contentTypeHeaderValue = response.headers["content-type"];
+        if (!isSupportedMime(contentTypeHeaderValue)) {
+          throw new Error(
+            `Invalid "content-type" value. ${contentTypeHeaderValue}`
+          );
+        }
+        FileSaver.saveAs(
+          response.data,
+          `${params.outputFile}${MIME_TO_EXTENSION[contentTypeHeaderValue]}`
+        );
+        this.convertingStatus = CONVERTING_STATUS.DONE;
+        setTimeout(() => {
+          this.convertingStatus = CONVERTING_STATUS.NONE;
+        }, 500);
+      })
+      .catch((error) => alert(error));
+  }
+}
 </script>
 
 <style>
