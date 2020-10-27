@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:10.8
+      - image: circleci/node:12.19.0
 
     working_directory: ~/repo
 
@@ -29,8 +29,7 @@ jobs:
             - packages/pdfator-cli/node_modules
             - packages/pdfator-serverless/node_modules
             - packages/pdfator-front/node_modules
-          key:
-            v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}-{{ checksum "packages/pdfator-front/package.json" }}
+          key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "packages/pdfator-core/package.json" }}-{{ checksum "packages/pdfator-cli/package.json" }}-{{ checksum "packages/pdfator-serverless/package.json" }}-{{ checksum "packages/pdfator-front/package.json" }}
 
       # Bootstrap Lerna
       - run: npm run boostrap
