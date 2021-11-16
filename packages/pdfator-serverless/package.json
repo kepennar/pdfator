@@ -27,7 +27,7 @@
     "@types/puppeteer": "^3.0.2",
     "@types/sha1": "^1.1.1",
     "@vercel/ncc": "0.24.1",
-    "aws-sdk": "^2.766.0",
+    "aws-sdk": "^2.814.0",
     "jest": "^22.4.4",
     "prettier": "^2.1.2",
     "serverless": "^2.4.0",
